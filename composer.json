@@ -31,8 +31,8 @@
         "brasil"
     ],
     "support": {
-        "issues": "https://github.com/salvadorbba/tribcalc/issues",
-        "source": "https://github.com/salvadorbba/tribcalc"
+        "issues": "https://github.com/SALVADORBBA/tribcalc/issues",
+        "source": "https://github.com/SALVADORBBA/tribcalc"
     },
     "scripts": {
         "test": "phpunit",
