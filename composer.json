@@ -6,7 +6,7 @@
     "license": "MIT",
     "autoload": {
         "psr-4": { 
-            "TribCalc\\": "src/" 
+            "TribCalc\\": "src/"
         }
     },
     "authors": [
@@ -18,5 +18,17 @@
     "require": {
         "php": ">=8.0"
     },
-    "minimum-stability": "stable"
+    "minimum-stability": "stable",
+    "prefer-stable": true,
+    "keywords": [
+        "tributos",
+        "calculadora",
+        "impostos",
+        "fiscal",
+        "brasil"
+    ],
+    "support": {
+        "issues": "https://github.com/salvadorbba/tribcalc/issues",
+        "source": "https://github.com/salvadorbba/tribcalc"
+    }
 }
