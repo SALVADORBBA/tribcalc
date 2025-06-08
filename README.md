@@ -5,7 +5,7 @@ Biblioteca PHP para cálculos tributários brasileiros.
 ## Instalação
 
 ```bash
-composer require tribcalc/tribcalc
+composer require salvadorbba/tribcalc
 ```
 
 ## Uso
