@@ -2,6 +2,7 @@
     "name": "salvadorbba/tribcalc",
     "description": "Calculadora de tributos para aplicações PHP",
     "type": "library",
+    "version": "1.0.0",
     "license": "MIT",
     "autoload": {
         "psr-4": {
