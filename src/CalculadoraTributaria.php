@@ -275,7 +275,7 @@ class CalculadoraTributaria
         ];
     }
 
-    public function exibirDadosObjeto(): void
+    public function exibirDadosObjeto(): void 
     {        
         $dados = [
             'dados_entrada' => [
