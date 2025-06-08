@@ -83,16 +83,29 @@ class CalculadoraTributaria
         return ($origem && $destino) ? 12.0 : 7.0;
     }
 
+    private function calcularBaseDesoneracao(): float
+    {
+        if ($this->valorDesonerado <= 0) {
+            return 0;
+        }
+        return $this->valorProduto - $this->valorDesonerado;
+    }
+
     private function calcularIcms(): array
     {
-        $base = $this->valorProduto;
+        $base = $this->calcularBaseDesoneracao();
+        if ($base <= 0) {
+            $base = $this->valorProduto;
+        }
+        
         if ($this->aliquotaRedBcIcms > 0) {
             $base *= (1 - $this->aliquotaRedBcIcms / 100);
         }
         $aliquota = $this->getAliquotaIcms();
         $valor = $base * ($aliquota / 100);
         return [
-            'base_calculo' => round($base, 2),
+            'base_calculo' => round($this->valorDesonerado, 2),
+            'base_desoneracao' => round($base, 2),
             'aliquota' => $aliquota,
             'valor' => round($valor, 2)
         ];
@@ -154,6 +167,43 @@ class CalculadoraTributaria
         return $regimes[$this->regime_tributario] ?? 'Não especificado';
     }
 
+    private function calcularDifal(): array
+    {
+        if ($this->ufOrigem === $this->ufDestino) {
+            return ['valor' => 0];
+        }
+        
+        $aliquotaOrigem = $this->getAliquotaIcms();
+        $aliquotaDestino = $this->getAliquotaIcmsDestino();
+        $base = $this->valorProduto;
+        
+        if ($this->aliquotaRedBcIcms > 0) {
+            $base *= (1 - $this->aliquotaRedBcIcms / 100);
+        }
+        
+        $difal = $base * (($aliquotaDestino - $aliquotaOrigem) / 100);
+        return ['valor' => round($difal, 2)];
+    }
+
+    private function getAliquotaIcmsDestino(): float
+    {
+        $aliquotas = [
+            'AC'=>17,'AL'=>17,'AM'=>18,'AP'=>18,'BA'=>18,'CE'=>18,'DF'=>18,'ES'=>17,'GO'=>17,
+            'MA'=>18,'MG'=>18,'MS'=>17,'MT'=>17,'PA'=>17,'PB'=>18,'PE'=>18,'PI'=>18,'PR'=>18,
+            'RJ'=>20,'RN'=>18,'RO'=>17.5,'RR'=>17,'RS'=>17,'SC'=>17,'SE'=>18,'SP'=>18,'TO'=>18
+        ];
+        return $aliquotas[$this->ufDestino];
+    }
+
+    private function calcularValorDesoneracao(): float
+    {
+        if ($this->valorDesonerado <= 0) {
+            return 0;
+        }
+        $aliquota = $this->getAliquotaIcms();
+        return round($this->valorDesonerado * ($aliquota / 100), 2);
+    }
+
     public function calcularTributos(): array
     {
         return [
@@ -165,11 +215,87 @@ class CalculadoraTributaria
             'ibs' => $this->calcularIBS(),
             'iva' => $this->calcularIVA(),
             'fcp' => $this->calcularFCP(),
+            'difal' => $this->calcularDifal(),
             'desoneracao' => [
-                'valor' => $this->valorDesonerado,
+                'valor' => $this->calcularValorDesoneracao(),
                 'motivo' => $this->getJustificativaDesoneracao()
             ]
         ];
+    }
+
+    public function exibirResultadosDetalhados(): array
+    {
+        $resultado = $this->calcularTributos();
+        
+        return [
+            'regime_tributario' => $resultado['regime_tributario'],
+            'valor_produto' => $resultado['valor_produto'],
+            'icms' => [
+                'base_calculo' => $resultado['icms']['base_calculo'],
+                'base_desoneracao' => $resultado['icms']['base_desoneracao'],
+                'aliquota' => $resultado['icms']['aliquota'],
+                'valor' => $resultado['icms']['valor']
+            ],
+            'icms_st' => [
+                'base_calculo' => $resultado['icms_st']['base_calculo'],
+                'valor' => $resultado['icms_st']['valor']
+            ],
+            'difal' => [
+                'base_calculo' => $resultado['valor_produto'],
+                'aliquota_origem' => $this->getAliquotaIcms(),
+                'aliquota_destino' => $this->getAliquotaIcmsDestino(),
+                'valor' => $resultado['difal']['valor']
+            ],
+            'ipi' => [
+                'base_calculo' => $resultado['valor_produto'],
+                'aliquota' => $this->aliquotaIpi,
+                'valor' => $resultado['ipi']['valor']
+            ],
+            'ibs' => [
+                'base_calculo' => $resultado['valor_produto'],
+                'aliquota' => $this->aliquotaIbs,
+                'valor' => $resultado['ibs']['valor']
+            ],
+            'iva' => [
+                'base_calculo' => $resultado['valor_produto'],
+                'aliquota' => $this->aliquotaIva,
+                'valor' => $resultado['iva']['valor']
+            ],
+            'fcp' => [
+                'base_calculo' => $resultado['valor_produto'],
+                'aliquota' => $this->aliquotaFcp,
+                'valor' => $resultado['fcp']['valor']
+            ],
+            'desoneracao' => [
+                'base_calculo' => $this->valorDesonerado,
+                'aliquota' => $this->getAliquotaIcms(),
+                'valor' => $resultado['desoneracao']['valor'],
+                'motivo' => $resultado['desoneracao']['motivo']
+            ]
+        ];
+    }
+
+    public function exibirDadosObjeto(): void
+    {        
+        $dados = [
+            'dados_entrada' => [
+                'valor_produto' => $this->valorProduto,
+                'uf_origem' => $this->ufOrigem,
+                'uf_destino' => $this->ufDestino,
+                'aliquota_red_bc_icms' => $this->aliquotaRedBcIcms,
+                'mva_ajustada' => $this->mvaAjustada,
+                'aliquota_ipi' => $this->aliquotaIpi,
+                'aliquota_ibs' => $this->aliquotaIbs,
+                'aliquota_iva' => $this->aliquotaIva,
+                'aliquota_fcp' => $this->aliquotaFcp,
+                'valor_desonerado' => $this->valorDesonerado,
+                'motivo_desoneracao' => $this->getJustificativaDesoneracao(),
+                'regime_tributario' => $this->getRegimeTributario()
+            ],
+            'resultados' => $this->calcularTributos()
+        ];
+
+        echo json_encode($dados, JSON_PRETTY_PRINT | JSON_UNESCAPED_UNICODE);
     }
 }
 
