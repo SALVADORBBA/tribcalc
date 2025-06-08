@@ -1,21 +1,8 @@
 <?php
+declare(strict_types=1);
 
 namespace TribCalc;
 
-/**
- * @property float $valorProduto
- * @property string $ufOrigem
- * @property string $ufDestino
- * @property float $aliquotaRedBcIcms
- * @property float $mvaAjustada
- * @property float $aliquotaIpi
- * @property float $aliquotaIbs
- * @property float $aliquotaIva
- * @property float $aliquotaFcp
- * @property float $valorDesonerado
- * @property int $motivoDesoneracao
- * @property int $regime_tributario
- */
 class CalculadoraTributaria
 {
     private float $valorProduto;
@@ -44,60 +31,70 @@ class CalculadoraTributaria
         float $valorDesonerado,
         int $motivoDesoneracao,
         int $regime_tributario
-    ) {
-        $this->valorProduto = $valorProduto;
+    )
+    {
+        $this->valorProduto = (float) $valorProduto;
         $this->ufOrigem = strtoupper($ufOrigem);
         $this->ufDestino = strtoupper($ufDestino);
-        $this->aliquotaRedBcIcms = $aliquotaRedBcIcms;
-        $this->mvaAjustada = $mvaAjustada;
-        $this->aliquotaIpi = $aliquotaIpi;
-        $this->aliquotaIbs = $aliquotaIbs;
-        $this->aliquotaIva = $aliquotaIva;
-        $this->aliquotaFcp = $aliquotaFcp;
-        $this->valorDesonerado = $valorDesonerado;
-        $this->motivoDesoneracao = $motivoDesoneracao;
-        $this->regime_tributario = $regime_tributario;
+        $this->aliquotaRedBcIcms = (float) $aliquotaRedBcIcms;
+        $this->mvaAjustada = (float) $mvaAjustada;
+        $this->aliquotaIpi = (float) $aliquotaIpi;
+        $this->aliquotaIbs = (float) $aliquotaIbs;
+        $this->aliquotaIva = (float) $aliquotaIva;
+        $this->aliquotaFcp = (float) $aliquotaFcp;
+        $this->valorDesonerado = (float) $valorDesonerado;
+        $this->motivoDesoneracao = (int) $motivoDesoneracao;
+        $this->regime_tributario = (int) $regime_tributario;
     }
+
+        public static function fromObject(object $obj): self
+        {
+            return new self(
+                $obj->valorProduto,
+                $obj->ufOrigem,
+                $obj->ufDestino,
+                $obj->aliquotaRedBcIcms,
+                $obj->mvaAjustada,
+                $obj->aliquotaIpi,
+                $obj->aliquotaIbs,
+                $obj->aliquotaIva,
+                $obj->aliquotaFcp,
+                $obj->valorDesonerado,
+                $obj->motivoDesoneracao,
+                $obj->regime_tributario
+            );
+        }
+
 
     private function getAliquotaIcms(): float
     {
-        $aliquotasInternas = [
-            'AC' => 17.0, 'AL' => 17.0, 'AM' => 18.0, 'AP' => 18.0,
-            'BA' => 18.0, 'CE' => 18.0, 'DF' => 18.0, 'ES' => 17.0,
-            'GO' => 17.0, 'MA' => 18.0, 'MG' => 18.0, 'MS' => 17.0,
-            'MT' => 17.0, 'PA' => 17.0, 'PB' => 18.0, 'PE' => 18.0,
-            'PI' => 18.0, 'PR' => 18.0, 'RJ' => 20.0, 'RN' => 18.0,
-            'RO' => 17.5, 'RR' => 17.0, 'RS' => 17.0, 'SC' => 17.0,
-            'SE' => 18.0, 'SP' => 18.0, 'TO' => 18.0
+        $aliquotas = [
+            'AC'=>17,'AL'=>17,'AM'=>18,'AP'=>18,'BA'=>18,'CE'=>18,'DF'=>18,'ES'=>17,'GO'=>17,
+            'MA'=>18,'MG'=>18,'MS'=>17,'MT'=>17,'PA'=>17,'PB'=>18,'PE'=>18,'PI'=>18,'PR'=>18,
+            'RJ'=>20,'RN'=>18,'RO'=>17.5,'RR'=>17,'RS'=>17,'SC'=>17,'SE'=>18,'SP'=>18,'TO'=>18
         ];
 
         if ($this->ufOrigem === $this->ufDestino) {
-            return $aliquotasInternas[$this->ufDestino];
+            return $aliquotas[$this->ufDestino];
         }
 
-        // Alíquota interestadual
-        $sulSudeste = ['SP', 'RJ', 'MG', 'ES', 'RS', 'SC', 'PR'];
+        $sulSudeste = ['SP','RJ','MG','ES','RS','SC','PR'];
         $origem = in_array($this->ufOrigem, $sulSudeste);
         $destino = in_array($this->ufDestino, $sulSudeste);
 
-        if ($origem && $destino) {
-            return 12.0;
-        }
-        return 7.0;
+        return ($origem && $destino) ? 12.0 : 7.0;
     }
 
     private function calcularIcms(): array
     {
-        $baseCalculo = $this->valorProduto;
+        $base = $this->valorProduto;
         if ($this->aliquotaRedBcIcms > 0) {
-            $baseCalculo *= (1 - ($this->aliquotaRedBcIcms / 100));
+            $base *= (1 - $this->aliquotaRedBcIcms / 100);
         }
-
         $aliquota = $this->getAliquotaIcms();
-        $valor = $baseCalculo * ($aliquota / 100);
-
+        $valor = $base * ($aliquota / 100);
         return [
-            'base_calculo' => round($baseCalculo, 2),
+            'base_calculo' => round($base, 2),
             'aliquota' => $aliquota,
             'valor' => round($valor, 2)
         ];
@@ -108,96 +105,68 @@ class CalculadoraTributaria
         if ($this->mvaAjustada <= 0) {
             return ['base_calculo' => 0, 'valor' => 0];
         }
-
-        $baseCalculo = $this->valorProduto * (1 + ($this->mvaAjustada / 100));
-        $aliquotaDestino = $this->getAliquotaIcms();
-        $valorIcmsProprio = $this->calcularIcms()['valor'];
-        $valorST = ($baseCalculo * ($aliquotaDestino / 100)) - $valorIcmsProprio;
-
+        $base = $this->valorProduto * (1 + $this->mvaAjustada / 100);
+        $valorProprio = $this->calcularIcms()['valor'];
+        $aliquota = $this->getAliquotaIcms();
+        $valorST = ($base * ($aliquota / 100)) - $valorProprio;
         return [
-            'base_calculo' => round($baseCalculo, 2),
+            'base_calculo' => round($base, 2),
             'valor' => round($valorST, 2)
         ];
     }
 
     private function calcularIPI(): array
     {
-        $valor = $this->valorProduto * ($this->aliquotaIpi / 100);
-        return ['valor' => round($valor, 2)];
+        return ['valor' => round($this->valorProduto * $this->aliquotaIpi / 100, 2)];
     }
 
     private function calcularIBS(): array
     {
-        $valor = $this->valorProduto * ($this->aliquotaIbs / 100);
-        return ['valor' => round($valor, 2)];
+        return ['valor' => round($this->valorProduto * $this->aliquotaIbs / 100, 2)];
     }
 
     private function calcularIVA(): array
     {
-        $valor = $this->valorProduto * ($this->aliquotaIva / 100);
-        return ['valor' => round($valor, 2)];
+        return ['valor' => round($this->valorProduto * $this->aliquotaIva / 100, 2)];
     }
 
     private function calcularFCP(): array
     {
-        $valor = $this->valorProduto * ($this->aliquotaFcp / 100);
-        return ['valor' => round($valor, 2)];
+        return ['valor' => round($this->valorProduto * $this->aliquotaFcp / 100, 2)];
     }
 
     private function getJustificativaDesoneracao(): string
     {
-        $justificativas = [
-            1 => 'Táxi',
-            2 => 'Deficiente Físico',
-            3 => 'Produtor Agropecuário',
-            4 => 'Frotista/Locadora',
-            5 => 'Diplomático/Consular',
-            6 => 'Utilitários e Motocicletas da Amazônia Ocidental',
-            7 => 'SUFRAMA',
-            8 => 'Venda a Órgãos Públicos',
-            9 => 'Outros'
+        $motivos = [
+            1 => 'Táxi', 2 => 'Deficiente Físico', 3 => 'Produtor Agropecuário',
+            4 => 'Frotista/Locadora', 5 => 'Diplomático/Consular', 6 => 'Amazônia Ocidental',
+            7 => 'SUFRAMA', 8 => 'Venda a Órgãos Públicos', 9 => 'Outros'
         ];
-
-        return $justificativas[$this->motivoDesoneracao] ?? 'Não especificado';
+        return $motivos[$this->motivoDesoneracao] ?? 'Não especificado';
     }
 
     private function getRegimeTributario(): string
     {
         $regimes = [
             1 => 'Simples Nacional',
-            2 => 'Simples Nacional - Excesso de Sublimite',
+            2 => 'SN - Excesso Sublimite',
             3 => 'Regime Normal',
-            4 => 'MEI - Microempreendedor Individual'
+            4 => 'MEI'
         ];
-
         return $regimes[$this->regime_tributario] ?? 'Não especificado';
     }
 
     public function calcularTributos(): array
     {
-        $icms = $this->calcularIcms();
-        $icmsST = $this->calcularIcmsST();
-        $ipi = $this->calcularIPI();
-        $ibs = $this->calcularIBS();
-        $iva = $this->calcularIVA();
-        $fcp = $this->calcularFCP();
-
         return [
             'regime_tributario' => $this->getRegimeTributario(),
             'valor_produto' => $this->valorProduto,
-            'icms' => [
-                'base_calculo' => $icms['base_calculo'],
-                'aliquota' => $icms['aliquota'],
-                'valor' => $icms['valor']
-            ],
-            'icms_st' => [
-                'base_calculo' => $icmsST['base_calculo'],
-                'valor' => $icmsST['valor']
-            ],
-            'ipi' => $ipi,
-            'ibs' => $ibs,
-            'iva' => $iva,
-            'fcp' => $fcp,
+            'icms' => $this->calcularIcms(),
+            'icms_st' => $this->calcularIcmsST(),
+            'ipi' => $this->calcularIPI(),
+            'ibs' => $this->calcularIBS(),
+            'iva' => $this->calcularIVA(),
+            'fcp' => $this->calcularFCP(),
             'desoneracao' => [
                 'valor' => $this->valorDesonerado,
                 'motivo' => $this->getJustificativaDesoneracao()
@@ -205,3 +174,4 @@ class CalculadoraTributaria
         ];
     }
 }
+
