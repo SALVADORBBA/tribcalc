@@ -1,0 +1,21 @@
+{
+    "name": "salvadorbba/tribcalc",
+    "description": "Calculadora de tributos para aplicações PHP",
+    "type": "library",
+    "license": "MIT",
+    "autoload": {
+        "psr-4": {
+            "TribCalc\\": "src/"
+        }
+    },
+    "authors": [
+        {
+            "name": "Rubens dos Santos",
+            "email": "salvadorbba@gmail.com"
+        }
+    ],
+    "require": {
+        "php": ">=8.0"
+    },
+    "minimum-stability": "stable"
+}
