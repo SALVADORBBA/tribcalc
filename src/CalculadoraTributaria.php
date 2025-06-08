@@ -83,7 +83,7 @@ class CalculadoraTributaria
 
         return [
             'base_calculo' => round($baseCalculo, 2),
-            'aliquota' => $aliquota,
+            'aliquota' => $aliquota, 
             'valor' => round($valor, 2)
         ];
     }
