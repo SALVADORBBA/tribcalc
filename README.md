@@ -15,7 +15,7 @@ composer require salvadorbba/tribcalc
 ```php
 use TribCalc\CalculadoraTributaria;
 
-$calculadora = new CalculadoraTributaria(
+$calculadora = new CalculadoraTributaria( 
     valorProduto: 1000.00,
     ufOrigem: 'SP',
     ufDestino: 'RJ',

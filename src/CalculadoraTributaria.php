@@ -1,6 +1,6 @@
 <?php
 
-namespace TribCalc;
+namespace TribCalc; 
 class CalculadoraTributaria
 {
     private float $valorProduto;
