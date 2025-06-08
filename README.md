@@ -1,72 +1,88 @@
-# TribCalc - Calculadora de Tributos
+# TribCalc
 
-**TribCalc** é uma biblioteca PHP para cálculos tributários no Brasil, com foco em ICMS, ICMS-ST, IPI, FCP, IBS, IVA e desoneração.
+Biblioteca PHP para cálculos tributários brasileiros.
 
-## 📦 Instalação
-
-Use o Composer para instalar a biblioteca:
+## Instalação
 
 ```bash
-composer require salvadorbba/tribcalc
+composer require tribcalc/tribcalc
 ```
 
-## ✅ Como Usar
+## Uso
+
+A classe `CalculadoraTributaria` pode ser utilizada de duas formas:
+
+### 1. Usando o construtor diretamente
 
 ```php
-use TribCalc\CalculadoraTributaria;
-
-$calculadora = new CalculadoraTributaria( 
-    valorProduto: 1000.00,
-    ufOrigem: 'SP',
-    ufDestino: 'RJ',
-    aliquotaRedBcIcms: 0.00,
-    mvaAjustada: 40.00,
-    aliquotaIpi: 5.00,
-    aliquotaIbs: 2.00,
-    aliquotaIva: 3.00,
-    aliquotaFcp: 2.00,
-    valorDesonerado: 0.00,
-    motivoDesoneracao: 9,
-    regime_tributario: 3
+$calculadora = new CalculadoraTributaria(
+    1000.00,        // valor do produto
+    'SP',           // UF de origem
+    'RJ',           // UF de destino
+    0.00,           // alíquota de redução da base de cálculo do ICMS
+    30.00,          // MVA ajustada
+    10.00,          // alíquota do IPI
+    1.00,           // alíquota do IBS
+    2.00,           // alíquota do IVA
+    2.00,           // alíquota do FCP
+    100.00,         // valor desonerado
+    9,              // motivo da desoneração (9 = Outros)
+    3               // regime tributário (3 = Regime Normal)
 );
 
-$resultados = $calculadora->calcularTributos();
-
-print_r($resultados);
+// Obtém os resultados detalhados
+$resultados = $calculadora->exibirResultadosDetalhados();
 ```
 
-### 🧾 Exemplo de Saída
+### 2. Usando o método factory a partir de um objeto
 
 ```php
-[
-    'valor_icms'         => 120.00,
-    'valor_icms_st'      => 150.00,
-    'valor_ipi'          => 50.00,
-    'valor_ibs'          => 20.00,
-    'valor_iva'          => 30.00,
-    'valor_fcp'          => 20.00,
-    'valor_desonerado'   => 0.00,
-    'motivo_desoneracao' => 9
-]
+$dados = (object)[
+    'valorProduto' => 1000.00,
+    'ufOrigem' => 'SP',
+    'ufDestino' => 'RJ',
+    'aliquotaRedBcIcms' => 0.00,
+    'mvaAjustada' => 30.00,
+    'aliquotaIpi' => 10.00,
+    'aliquotaIbs' => 1.00,
+    'aliquotaIva' => 2.00,
+    'aliquotaFcp' => 2.00,
+    'valorDesonerado' => 100.00,
+    'motivoDesoneracao' => 9,
+    'regime_tributario' => 3
+];
+
+$calculadora = CalculadoraTributaria::fromObject($dados);
+
+// Obtém os resultados detalhados
+$resultados = $calculadora->exibirResultadosDetalhados();
 ```
 
-## ⚙️ Parâmetros
+### Métodos Disponíveis
 
-| Parâmetro             | Tipo    | Descrição                                              |
-|----------------------|---------|----------------------------------------------------------|
-| `valorProduto`       | float   | Valor total do produto                                  |
-| `ufOrigem`           | string  | Unidade Federativa de origem                            |
-| `ufDestino`          | string  | Unidade Federativa de destino                           |
-| `aliquotaRedBcIcms`  | float   | Percentual de redução da base de cálculo do ICMS        |
-| `mvaAjustada`        | float   | Margem de Valor Agregado para ICMS-ST                  |
-| `aliquotaIpi`        | float   | Alíquota de IPI aplicada                                |
-| `aliquotaIbs`        | float   | Alíquota do imposto IBS                                 |
-| `aliquotaIva`        | float   | Alíquota do imposto IVA                                 |
-| `aliquotaFcp`        | float   | Alíquota de FCP (Fundo de Combate à Pobreza)           |
-| `valorDesonerado`    | float   | Valor desonerado (se aplicável)                         |
-| `motivoDesoneracao`  | int     | Código do motivo de desoneração                         |
-| `regime_tributario`  | int     | Tipo de regime tributário (1 = Simples, 3 = Normal, etc)|
+- `exibirResultadosDetalhados()`: Retorna um array com todos os detalhes dos cálculos, incluindo bases de cálculo, alíquotas e valores para cada tributo
+- `exibirDadosObjeto()`: Retorna um array com os dados de entrada e os resultados dos cálculos
+- `calcularTributos()`: Retorna um array com os resultados dos cálculos tributários
 
-## 📄 Licença
+### Motivos de Desoneração
 
-Este projeto é licenciado sob a [MIT License](LICENSE).
+- 1: Táxi
+- 2: Deficiente Físico
+- 3: Produtor Agropecuário
+- 4: Frotista/Locadora
+- 5: Diplomático/Consular
+- 6: Amazônia Ocidental
+- 7: SUFRAMA
+- 8: Venda a Órgãos Públicos
+- 9: Outros
+
+### Regimes Tributários
+
+- 1: Simples Nacional
+- 2: SN - Excesso Sublimite
+- 3: Regime Normal
+- 4: MEI
+
+## Licença
+
+MIT

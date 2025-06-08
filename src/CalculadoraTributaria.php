@@ -3,68 +3,66 @@ namespace TribCalc;
 
 class CalculadoraTributaria
 {
-    private $valorProduto;
-    private $ufOrigem;
-    private $ufDestino;
-    private $aliquotaRedBcIcms;
-    private $mvaAjustada;
-    private $aliquotaIpi;
-    private $aliquotaIbs;
-    private $aliquotaIva;
-    private $aliquotaFcp;
-    private $valorDesonerado;
-    private $motivoDesoneracao;
-    private $regime_tributario;
+    private float $valorProduto;
+    private string $ufOrigem;
+    private string $ufDestino;
+    private float $aliquotaRedBcIcms;
+    private float $mvaAjustada;
+    private float $aliquotaIpi;
+    private float $aliquotaIbs;
+    private float $aliquotaIva;
+    private float $aliquotaFcp;
+    private float $valorDesonerado;
+    private int $motivoDesoneracao;
+    private int $regime_tributario;
 
     public function __construct(
-        $valorProduto,
-        $ufOrigem,
-        $ufDestino,
-        $aliquotaRedBcIcms,
-        $mvaAjustada,
-        $aliquotaIpi,
-        $aliquotaIbs,
-        $aliquotaIva,
-        $aliquotaFcp,
-        $valorDesonerado,
-        $motivoDesoneracao,
-        $regime_tributario
-    )
-    {
-        $this->valorProduto = (float) $valorProduto;
+        float $valorProduto,
+        string $ufOrigem,
+        string $ufDestino,
+        float $aliquotaRedBcIcms,
+        float $mvaAjustada,
+        float $aliquotaIpi,
+        float $aliquotaIbs,
+        float $aliquotaIva,
+        float $aliquotaFcp,
+        float $valorDesonerado,
+        int $motivoDesoneracao,
+        int $regime_tributario
+    ) {
+        $this->valorProduto = $valorProduto;
         $this->ufOrigem = strtoupper($ufOrigem);
         $this->ufDestino = strtoupper($ufDestino);
-        $this->aliquotaRedBcIcms = (float) $aliquotaRedBcIcms;
-        $this->mvaAjustada = (float) $mvaAjustada;
-        $this->aliquotaIpi = (float) $aliquotaIpi;
-        $this->aliquotaIbs = (float) $aliquotaIbs;
-        $this->aliquotaIva = (float) $aliquotaIva;
-        $this->aliquotaFcp = (float) $aliquotaFcp;
-        $this->valorDesonerado = (float) $valorDesonerado;
-        $this->motivoDesoneracao = (int) $motivoDesoneracao;
-        $this->regime_tributario = (int) $regime_tributario;
+        $this->aliquotaRedBcIcms = $aliquotaRedBcIcms;
+        $this->mvaAjustada = $mvaAjustada;
+        $this->aliquotaIpi = $aliquotaIpi;
+        $this->aliquotaIbs = $aliquotaIbs;
+        $this->aliquotaIva = $aliquotaIva;
+        $this->aliquotaFcp = $aliquotaFcp;
+        $this->valorDesonerado = $valorDesonerado;
+        $this->motivoDesoneracao = $motivoDesoneracao;
+        $this->regime_tributario = $regime_tributario;
     }
 
-        public static function fromObject(object $obj): self
-        {
-            return new self(
-                $obj->valorProduto,
-                $obj->ufOrigem,
-                $obj->ufDestino,
-                $obj->aliquotaRedBcIcms,
-                $obj->mvaAjustada,
-                $obj->aliquotaIpi,
-                $obj->aliquotaIbs,
-                $obj->aliquotaIva,
-                $obj->aliquotaFcp,
-                $obj->valorDesonerado,
-                $obj->motivoDesoneracao,
-                $obj->regime_tributario
-            );
-        }
+    public static function fromObject(object $obj): self
+    {
+        return new self(
+            (float) $obj->valorProduto,
+            (string) $obj->ufOrigem,
+            (string) $obj->ufDestino,
+            (float) $obj->aliquotaRedBcIcms,
+            (float) $obj->mvaAjustada,
+            (float) $obj->aliquotaIpi,
+            (float) $obj->aliquotaIbs,
+            (float) $obj->aliquotaIva,
+            (float) $obj->aliquotaFcp,
+            (float) $obj->valorDesonerado,
+            (int) $obj->motivoDesoneracao,
+            (int) $obj->regime_tributario
+        );
+    }
 
-
-    private function getAliquotaIcms()
+    private function getAliquotaIcms(): float
     {
         $aliquotas = [
             'AC'=>17,'AL'=>17,'AM'=>18,'AP'=>18,'BA'=>18,'CE'=>18,'DF'=>18,'ES'=>17,'GO'=>17,
@@ -146,27 +144,6 @@ class CalculadoraTributaria
         return ['valor' => round($this->valorProduto * $this->aliquotaFcp / 100, 2)];
     }
 
-    private function getJustificativaDesoneracao(): string
-    {
-        $motivos = [
-            1 => 'Táxi', 2 => 'Deficiente Físico', 3 => 'Produtor Agropecuário',
-            4 => 'Frotista/Locadora', 5 => 'Diplomático/Consular', 6 => 'Amazônia Ocidental',
-            7 => 'SUFRAMA', 8 => 'Venda a Órgãos Públicos', 9 => 'Outros'
-        ];
-        return $motivos[$this->motivoDesoneracao] ?? 'Não especificado';
-    }
-
-    private function getRegimeTributario(): string
-    {
-        $regimes = [
-            1 => 'Simples Nacional',
-            2 => 'SN - Excesso Sublimite',
-            3 => 'Regime Normal',
-            4 => 'MEI'
-        ];
-        return $regimes[$this->regime_tributario] ?? 'Não especificado';
-    }
-
     private function calcularDifal(): array
     {
         if ($this->ufOrigem === $this->ufDestino) {
@@ -202,6 +179,27 @@ class CalculadoraTributaria
         }
         $aliquota = $this->getAliquotaIcms();
         return round($this->valorDesonerado * ($aliquota / 100), 2);
+    }
+
+    private function getJustificativaDesoneracao(): string
+    {
+        $motivos = [
+            1 => 'Táxi', 2 => 'Deficiente Físico', 3 => 'Produtor Agropecuário',
+            4 => 'Frotista/Locadora', 5 => 'Diplomático/Consular', 6 => 'Amazônia Ocidental',
+            7 => 'SUFRAMA', 8 => 'Venda a Órgãos Públicos', 9 => 'Outros'
+        ];
+        return $motivos[$this->motivoDesoneracao] ?? 'Não especificado';
+    }
+
+    private function getRegimeTributario(): string
+    {
+        $regimes = [
+            1 => 'Simples Nacional',
+            2 => 'SN - Excesso Sublimite',
+            3 => 'Regime Normal',
+            4 => 'MEI'
+        ];
+        return $regimes[$this->regime_tributario] ?? 'Não especificado';
     }
 
     public function calcularTributos(): array
@@ -275,7 +273,7 @@ class CalculadoraTributaria
         ];
     }
 
-    public function exibirDadosObjeto(): void 
+    public function exibirDadosObjeto(): array
     {        
         $dados = [
             'dados_entrada' => [
@@ -295,7 +293,7 @@ class CalculadoraTributaria
             'resultados' => $this->calcularTributos()
         ];
 
-        echo json_encode($dados, JSON_PRETTY_PRINT | JSON_UNESCAPED_UNICODE);
+        return $dados;
     }
 }
 
