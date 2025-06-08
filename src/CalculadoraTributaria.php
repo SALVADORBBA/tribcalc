@@ -3,46 +3,33 @@ namespace TribCalc;
 
 class CalculadoraTributaria
 {
-    private float $valorProduto;
-    private string $ufOrigem;
-    private string $ufDestino;
-    private float $aliquotaRedBcIcms;
-    private float $mvaAjustada;
-    private float $aliquotaIpi;
-    private float $aliquotaIbs;
-    private float $aliquotaIva;
-    private float $aliquotaFcp;
-    private float $valorDesonerado;
-    private int $motivoDesoneracao;
-    private int $regime_tributario;
-
-    public function __construct(
-        float $valorProduto,
-        string $ufOrigem,
-        string $ufDestino,
-        float $aliquotaRedBcIcms,
-        float $mvaAjustada,
-        float $aliquotaIpi,
-        float $aliquotaIbs,
-        float $aliquotaIva,
-        float $aliquotaFcp,
-        float $valorDesonerado,
-        int $motivoDesoneracao,
-        int $regime_tributario
-    ) {
-        $this->valorProduto = $valorProduto;
-        $this->ufOrigem = strtoupper($ufOrigem);
-        $this->ufDestino = strtoupper($ufDestino);
-        $this->aliquotaRedBcIcms = $aliquotaRedBcIcms;
-        $this->mvaAjustada = $mvaAjustada;
-        $this->aliquotaIpi = $aliquotaIpi;
-        $this->aliquotaIbs = $aliquotaIbs;
-        $this->aliquotaIva = $aliquotaIva;
-        $this->aliquotaFcp = $aliquotaFcp;
-        $this->valorDesonerado = $valorDesonerado;
-        $this->motivoDesoneracao = $motivoDesoneracao;
-        $this->regime_tributario = $regime_tributario;
-    }
+public function __construct(
+    $valorProduto,
+    $ufOrigem,
+    $ufDestino,
+    $aliquotaRedBcIcms,
+    $mvaAjustada,
+    $aliquotaIpi,
+    $aliquotaIbs,
+    $aliquotaIva,
+    $aliquotaFcp,
+    $valorDesonerado,
+    $motivoDesoneracao,
+    $regime_tributario
+) {
+    $this->valorProduto = (float) $valorProduto;
+    $this->ufOrigem = strtoupper((string) $ufOrigem);
+    $this->ufDestino = strtoupper((string) $ufDestino);
+    $this->aliquotaRedBcIcms = (float) $aliquotaRedBcIcms;
+    $this->mvaAjustada = (float) $mvaAjustada;
+    $this->aliquotaIpi = (float) $aliquotaIpi;
+    $this->aliquotaIbs = (float) $aliquotaIbs;
+    $this->aliquotaIva = (float) $aliquotaIva;
+    $this->aliquotaFcp = (float) $aliquotaFcp;
+    $this->valorDesonerado = (float) $valorDesonerado;
+    $this->motivoDesoneracao = (int) $motivoDesoneracao;
+    $this->regime_tributario = (int) $regime_tributario;
+}
 
     public static function fromObject(object $obj): self
     {
