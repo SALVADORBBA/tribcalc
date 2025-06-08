@@ -1,36 +1,34 @@
 <?php
-declare(strict_types=1);
-
 namespace TribCalc;
 
 class CalculadoraTributaria
 {
-    private float $valorProduto;
-    private string $ufOrigem;
-    private string $ufDestino;
-    private float $aliquotaRedBcIcms;
-    private float $mvaAjustada;
-    private float $aliquotaIpi;
-    private float $aliquotaIbs;
-    private float $aliquotaIva;
-    private float $aliquotaFcp;
-    private float $valorDesonerado;
-    private int $motivoDesoneracao;
-    private int $regime_tributario;
+    private $valorProduto;
+    private $ufOrigem;
+    private $ufDestino;
+    private $aliquotaRedBcIcms;
+    private $mvaAjustada;
+    private $aliquotaIpi;
+    private $aliquotaIbs;
+    private $aliquotaIva;
+    private $aliquotaFcp;
+    private $valorDesonerado;
+    private $motivoDesoneracao;
+    private $regime_tributario;
 
     public function __construct(
-        float $valorProduto,
-        string $ufOrigem,
-        string $ufDestino,
-        float $aliquotaRedBcIcms,
-        float $mvaAjustada,
-        float $aliquotaIpi,
-        float $aliquotaIbs,
-        float $aliquotaIva,
-        float $aliquotaFcp,
-        float $valorDesonerado,
-        int $motivoDesoneracao,
-        int $regime_tributario
+        $valorProduto,
+        $ufOrigem,
+        $ufDestino,
+        $aliquotaRedBcIcms,
+        $mvaAjustada,
+        $aliquotaIpi,
+        $aliquotaIbs,
+        $aliquotaIva,
+        $aliquotaFcp,
+        $valorDesonerado,
+        $motivoDesoneracao,
+        $regime_tributario
     )
     {
         $this->valorProduto = (float) $valorProduto;
@@ -66,7 +64,7 @@ class CalculadoraTributaria
         }
 
 
-    private function getAliquotaIcms(): float
+    private function getAliquotaIcms()
     {
         $aliquotas = [
             'AC'=>17,'AL'=>17,'AM'=>18,'AP'=>18,'BA'=>18,'CE'=>18,'DF'=>18,'ES'=>17,'GO'=>17,
