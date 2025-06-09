@@ -7,7 +7,11 @@
     "autoload": {
         "psr-4": {
             "TribCalc\\": "src/"
-        }
+        },
+        "files": [
+            "src/CalculadoraTributaria.php",
+            "src/RateioDocumentoFiscal.php"
+        ]
     },
     "authors": [
         {
@@ -48,7 +52,7 @@
         "optimize-autoloader": true
     },
     "archive": {
-        "exclude": ["/tests", "/docs", "/.gitattributes", "/.gitignore", "/phpunit.xml"],
-        "directory": ["/src", "/exemplo"]
+        "exclude": ["tests/", "docs/", ".gitattributes", ".gitignore", "phpunit.xml"],
+        "include": ["src/", "exemplo/"]
     }
 }
