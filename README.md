@@ -7,7 +7,7 @@
 ### Via Composer
 
 ```bash
-composer require salvadorbba/tribcalc:^1.0.1
+composer require salvadorbba/tribcalc:^1.0.2
 ```
 
 ### Uso no Adianti Framework
@@ -18,9 +18,11 @@ Para utilizar dentro de projetos Adianti, apenas adicione ao seu `composer.json`
 
 ## 💡 Como Usar
 
-A classe principal `CalculadoraTributaria` pode ser utilizada de duas formas:
+A biblioteca oferece duas classes principais:
 
-### ✅ 1. Usando o construtor diretamente
+### 📊 CalculadoraTributaria
+
+#### ✅ 1. Usando o construtor diretamente
 
 ```php
 use TribCalc\CalculadoraTributaria;
@@ -43,7 +45,7 @@ $calculadora = new CalculadoraTributaria(
 $resultados = $calculadora->exibirResultadosDetalhados();
 ```
 
-### ✅ 2. Usando a factory `fromObject()`
+#### ✅ 2. Usando a factory `fromObject()`
 
 ```php
 use TribCalc\CalculadoraTributaria;
@@ -68,15 +70,53 @@ $calculadora = CalculadoraTributaria::fromObject($dados);
 $resultados = $calculadora->exibirResultadosDetalhados();
 ```
 
+### 💰 RateioDocumentoFiscal
+
+Classe para calcular o rateio proporcional de valores (frete, seguro, desconto e outras despesas) entre itens.
+
+```php
+use TribCalc\RateioDocumentoFiscal;
+
+// Criando array de itens (cada item deve ter valor_total)
+$itens = [
+    (object)['id' => 1, 'valor_total' => 200.00],
+    (object)['id' => 2, 'valor_total' => 150.00],
+    (object)['id' => 3, 'valor_total' => 150.00]
+];
+
+// Valores a serem rateados
+$valor_frete = 100.00;
+$valor_seguro = 50.00;
+$valor_desconto = 75.00;
+$valor_outras_despesas = 25.00;
+
+// Calculando o rateio
+$itens_rateados = RateioDocumentoFiscal::calcularRateio(
+    $itens,
+    $valor_frete,
+    $valor_seguro,
+    $valor_desconto,
+    $valor_outras_despesas
+);
+```
+
 ---
 
 ## 📌 Métodos Disponíveis
 
+### CalculadoraTributaria
+
 | Método                       | Descrição                                                                 |
-|-----------------------------|---------------------------------------------------------------------------|
+|-----------------------------|----------------------------------------------------------------------------|
 | `exibirResultadosDetalhados()` | Retorna todos os tributos calculados com base de cálculo, alíquotas e valores |
 | `exibirDadosObjeto()`          | Exibe dados de entrada e os resultados finais em formato JSON             |
 | `calcularTributos()`          | Executa os cálculos e retorna os tributos calculados como objeto stdClass |
+
+### RateioDocumentoFiscal
+
+| Método                       | Descrição                                                                 |
+|-----------------------------|----------------------------------------------------------------------------|
+| `calcularRateio()`          | Calcula o rateio proporcional de valores entre os itens                    |
 
 ---
 
