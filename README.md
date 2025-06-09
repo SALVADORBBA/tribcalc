@@ -18,6 +18,7 @@ A classe `CalculadoraTributaria` pode ser utilizada de duas formas:
 ### 1. Usando o construtor diretamente
 
 ```php
+use TribCalc\CalculadoraTributaria;
 $calculadora = new CalculadoraTributaria(
     1000.00,        // valor do produto
     'SP',           // UF de origem
@@ -40,6 +41,7 @@ $resultados = $calculadora->exibirResultadosDetalhados();
 ### 2. Usando o método factory a partir de um objeto
 
 ```php
+use TribCalc\CalculadoraTributaria;
 $dados = (object)[
     'valorProduto' => 1000.00,
     'ufOrigem' => 'SP',
