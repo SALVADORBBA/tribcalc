@@ -12,7 +12,7 @@
             "src/CalculadoraTributaria.php",
             "src/RateioDocumentoFiscal.php"
         ]
-    },
+    }, 
     "authors": [
         {
             "name": "Rubens dos Santos",
