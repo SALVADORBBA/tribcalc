@@ -1,83 +1,55 @@
 <?php
+
 namespace TribCalc;
 
 class RateioDocumentoFiscal
 {
-    /**
-     * Método para calcular a distribuição proporcional de frete, seguro, desconto e outras despesas
-     * entre os itens de uma lista.
-     *
-     * @param array $itens Array de objetos stdClass representando os itens com valor_total.
-     * @param float $valor_frete Valor total do frete a ser distribuído.
-     * @param float $valor_seguro Valor total do seguro a ser distribuído.
-     * @param float $valor_desconto Valor total do desconto a ser distribuído.
-     * @param float $valor_outras_despesas Valor total de outras despesas a ser distribuído.
-     * @return array Array de objetos contendo os itens com os valores rateados adicionados.
-     */
-    public static function calcularRateio($itens, $valor_frete = 0, $valor_seguro = 0, $valor_desconto = 0, $valor_outras_despesas = 0)
+    public static function calcularRateio(array $itens, float $valor_frete = 0, float $valor_seguro = 0, float $valor_desconto = 0, float $valor_outros = 0)
     {
-        // Inicializa o array para armazenar os itens com valores rateados
-        $itens_rateados = [];
+        $total_itens = 0;
+        $itens_calculados = [];
 
-        // Calcula o valor total de todos os itens
-        $valor_total_itens = 0;
+        // Verifica se há itens e calcula o total
+        if (empty($itens)) {
+            return [];
+        }
+
+        // Calcula o total dos itens
         foreach ($itens as $item) {
-            if (!isset($item->valor_total)) {
-                throw new InvalidArgumentException('Todos os itens devem ter a propriedade valor_total definida');
+            if (!isset($item->valor_total) || !is_numeric($item->valor_total)) {
+                throw new \InvalidArgumentException('Todos os itens devem ter a propriedade valor_total numérica');
             }
-            $valor_total_itens += $item->valor_total;
+            $total_itens += $item->valor_total;
         }
 
-        // Inicializa as variáveis para a soma dos rateios
-        $soma_frete = 0;
-        $soma_seguro = 0;
-        $soma_desconto = 0;
-        $soma_outras_despesas = 0;
+        if ($total_itens <= 0) {
+            throw new \InvalidArgumentException('O valor total dos itens deve ser maior que zero');
+        }
 
-        // Percorre cada item para calcular e distribuir os valores rateados
+        // Calcula o rateio para cada item
         foreach ($itens as $item) {
-            // Calcula a porcentagem do valor total que representa o item
-            $percentual_item = $valor_total_itens > 0 ? $item->valor_total / $valor_total_itens : 0;
+            $item_calculado = clone $item;
+            $percentual = $item->valor_total / $total_itens;
 
-            // Calcula o rateio específico para cada item
-            $frete_rateado = $valor_frete * $percentual_item;
-            $seguro_rateado = $valor_seguro * $percentual_item;
-            $desconto_rateado = $valor_desconto * $percentual_item;
-            $outras_despesas_rateado = $valor_outras_despesas * $percentual_item;
+            $item_calculado->valor_frete = round($valor_frete * $percentual, 2);
+            $item_calculado->valor_seguro = round($valor_seguro * $percentual, 2);
+            $item_calculado->valor_desconto = round($valor_desconto * $percentual, 2);
+            $item_calculado->valor_outros = round($valor_outros * $percentual, 2);
 
-            // Cria um novo objeto stdClass para armazenar os dados do item com o rateio
-            $item_rateado = clone $item;
-
-            // Adiciona os valores rateados ao objeto
-            $item_rateado->frete_rateado = round($frete_rateado, 2);
-            $item_rateado->seguro_rateado = round($seguro_rateado, 2);
-            $item_rateado->desconto_rateado = round($desconto_rateado, 2);
-            $item_rateado->outras_despesas_rateado = round($outras_despesas_rateado, 2);
-
-            // Adiciona as somas dos rateios
-            $soma_frete += $item_rateado->frete_rateado;
-            $soma_seguro += $item_rateado->seguro_rateado;
-            $soma_desconto += $item_rateado->desconto_rateado;
-            $soma_outras_despesas += $item_rateado->outras_despesas_rateado;
-
-            // Adiciona o objeto ao array de resultados
-            $itens_rateados[] = $item_rateado;
+            $itens_calculados[] = $item_calculado;
         }
 
-        // Verifica e ajusta o primeiro item com as diferenças de arredondamento
-        $diferenca_frete = round($valor_frete - $soma_frete, 2);
-        $diferenca_seguro = round($valor_seguro - $soma_seguro, 2);
-        $diferenca_desconto = round($valor_desconto - $soma_desconto, 2);
-        $diferenca_outras_despesas = round($valor_outras_despesas - $soma_outras_despesas, 2);
+        // Ajusta eventuais diferenças de arredondamento no primeiro item
+        $total_frete = array_sum(array_column($itens_calculados, 'valor_frete'));
+        $total_seguro = array_sum(array_column($itens_calculados, 'valor_seguro'));
+        $total_desconto = array_sum(array_column($itens_calculados, 'valor_desconto'));
+        $total_outros = array_sum(array_column($itens_calculados, 'valor_outros'));
 
-        // Ajusta o primeiro item com as diferenças, se necessário
-        if (count($itens_rateados) > 0) {
-            $itens_rateados[0]->frete_rateado += $diferenca_frete;
-            $itens_rateados[0]->seguro_rateado += $diferenca_seguro;
-            $itens_rateados[0]->desconto_rateado += $diferenca_desconto;
-            $itens_rateados[0]->outras_despesas_rateado += $diferenca_outras_despesas;
-        }
+        $itens_calculados[0]->valor_frete += $valor_frete - $total_frete;
+        $itens_calculados[0]->valor_seguro += $valor_seguro - $total_seguro;
+        $itens_calculados[0]->valor_desconto += $valor_desconto - $total_desconto;
+        $itens_calculados[0]->valor_outros += $valor_outros - $total_outros;
 
-        return $itens_rateados;
+        return $itens_calculados;
     }
 }
