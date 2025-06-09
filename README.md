@@ -10,7 +10,7 @@ Instalação Adianti   salvadorbba/tribcalc:^1.0.1
 ```
         
 ## Uso
-
+ 
 A classe `CalculadoraTributaria` pode ser utilizada de duas formas:
 
 ### 1. Usando o construtor diretamente
