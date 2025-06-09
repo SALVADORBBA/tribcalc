@@ -1,13 +1,13 @@
 <?php
 require_once __DIR__ . '/../src/RateioDocumentoFiscal.php';
-
+ 
 use TribCalc\RateioDocumentoFiscal;
  
 // Criando alguns itens de exemplo
 $itens = [];
 
 // Item 1
-$item1 = new stdClass();
+$item1 = new stdClass(); 
 $item1->id = 1;
 $item1->descricao = 'Produto A';
 $item1->quantidade = 2;

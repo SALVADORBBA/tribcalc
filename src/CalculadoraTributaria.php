@@ -3,7 +3,7 @@ namespace TribCalc;
 
 class CalculadoraTributaria
 {
-    private float $valorProduto;
+    private float $valorProduto; 
     private string $ufOrigem;
     private string $ufDestino;
     private float $aliquotaRedBcIcms;

@@ -40,7 +40,7 @@ $calculadora = new CalculadoraTributaria(
     100.00,       // valorDesonerado
     9,            // motivoDesoneracao
     3             // regime_tributario
-);
+); 
 
 $resultados = $calculadora->exibirResultadosDetalhados();
 ```

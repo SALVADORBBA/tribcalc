@@ -9,7 +9,7 @@ class RateioDocumentoFiscal
         $total_itens = 0;
         $itens_calculados = []; 
 
-        // Verifica se há itens e calcula o total
+        // Verifica se há itens e calcula o total 
         if (empty($itens)) {
             return [];
         }
