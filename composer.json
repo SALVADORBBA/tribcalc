@@ -18,11 +18,8 @@
     "require": {
         "php": ">=7.4"
     },
-    "require-dev": {
-        "phpunit/phpunit": "^9.0",
-        "squizlabs/php_codesniffer": "^3.0"
-    },
-    "minimum-stability": "stable",
+    "minimum-stability": "dev",
+    "prefer-stable": true,
     "keywords": [
         "tributos",
         "calculadora",
@@ -37,11 +34,6 @@
     "support": {
         "issues": "https://github.com/SALVADORBBA/tribcalc/issues",
         "source": "https://github.com/SALVADORBBA/tribcalc"
-    },
-    "scripts": {
-        "test": "phpunit",
-        "check-style": "phpcs src tests",
-        "fix-style": "phpcbf src tests"
     },
     "config": {
         "sort-packages": true,
