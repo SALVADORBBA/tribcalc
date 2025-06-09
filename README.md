@@ -1,47 +1,53 @@
 # TribCalc
 
-Biblioteca PHP para cálculos tributários brasileiros.
+**TribCalc** é uma biblioteca PHP moderna desenvolvida para facilitar o **cálculo de tributos no Brasil**, como ICMS, ICMS-ST, DIFAL, FCP, IPI, IVA, e IBS, de forma prática e extensível. Ideal para desenvolvedores que precisam integrar regras fiscais em sistemas de ERP, emissão de NFe/NFCe, ou backends financeiros.
 
-## Instalação Global
+## 🚀 Instalação
+
+### Via Composer
 
 ```bash
 composer require salvadorbba/tribcalc:^1.0.1
- ```
-   
-```bash
- Instalação Adianti   salvadorbba/tribcalc:^1.0.1
-```     
-## Uso
- 
-A classe `CalculadoraTributaria` pode ser utilizada de duas formas:
+```
 
-### 1. Usando o construtor diretamente
+### Uso no Adianti Framework
+
+Para utilizar dentro de projetos Adianti, apenas adicione ao seu `composer.json` e chame a classe normalmente nos controles, formulários ou serviços REST.
+
+---
+
+## 💡 Como Usar
+
+A classe principal `CalculadoraTributaria` pode ser utilizada de duas formas:
+
+### ✅ 1. Usando o construtor diretamente
 
 ```php
 use TribCalc\CalculadoraTributaria;
+
 $calculadora = new CalculadoraTributaria(
-    1000.00,        // valor do produto
-    'SP',           // UF de origem
-    'RJ',           // UF de destino
-    0.00,           // alíquota de redução da base de cálculo do ICMS
-    30.00,          // MVA ajustada
-    10.00,          // alíquota do IPI
-    1.00,           // alíquota do IBS
-    2.00,           // alíquota do IVA
-    2.00,           // alíquota do FCP
-    100.00,         // valor desonerado
-    9,              // motivo da desoneração (9 = Outros)
-    3               // regime tributário (3 = Regime Normal)
+    1000.00,      // valorProduto
+    'SP',         // ufOrigem
+    'RJ',         // ufDestino
+    0.00,         // aliquotaRedBcIcms
+    30.00,        // mvaAjustada
+    10.00,        // aliquotaIpi
+    1.00,         // aliquotaIbs
+    2.00,         // aliquotaIva
+    2.00,         // aliquotaFcp
+    100.00,       // valorDesonerado
+    9,            // motivoDesoneracao
+    3             // regime_tributario
 );
 
-// Obtém os resultados detalhados
 $resultados = $calculadora->exibirResultadosDetalhados();
 ```
 
-### 2. Usando o método factory a partir de um objeto
+### ✅ 2. Usando a factory `fromObject()`
 
 ```php
 use TribCalc\CalculadoraTributaria;
+
 $dados = (object)[
     'valorProduto' => 1000.00,
     'ufOrigem' => 'SP',
@@ -59,35 +65,62 @@ $dados = (object)[
 
 $calculadora = CalculadoraTributaria::fromObject($dados);
 
-// Obtém os resultados detalhados
 $resultados = $calculadora->exibirResultadosDetalhados();
 ```
 
-### Métodos Disponíveis
+---
 
-- `exibirResultadosDetalhados()`: Retorna um array com todos os detalhes dos cálculos, incluindo bases de cálculo, alíquotas e valores para cada tributo
-- `exibirDadosObjeto()`: Retorna um array com os dados de entrada e os resultados dos cálculos
-- `calcularTributos()`: Retorna um array com os resultados dos cálculos tributários
+## 📌 Métodos Disponíveis
 
-### Motivos de Desoneração
+| Método                       | Descrição                                                                 |
+|-----------------------------|---------------------------------------------------------------------------|
+| `exibirResultadosDetalhados()` | Retorna todos os tributos calculados com base de cálculo, alíquotas e valores |
+| `exibirDadosObjeto()`          | Exibe dados de entrada e os resultados finais em formato JSON             |
+| `calcularTributos()`          | Executa os cálculos e retorna os tributos calculados como objeto stdClass |
 
-- 1: Táxi
-- 2: Deficiente Físico
-- 3: Produtor Agropecuário
-- 4: Frotista/Locadora
-- 5: Diplomático/Consular
-- 6: Amazônia Ocidental
-- 7: SUFRAMA
-- 8: Venda a Órgãos Públicos
-- 9: Outros
+---
 
-### Regimes Tributários
+## 🔎 Códigos de Referência
 
-- 1: Simples Nacional
-- 2: SN - Excesso Sublimite
-- 3: Regime Normal
-- 4: MEI
+### Motivos de Desoneração (`motivoDesoneracao`)
 
-## Licença
+| Código | Descrição              |
+|--------|------------------------|
+| 1      | Táxi                   |
+| 2      | Deficiente Físico      |
+| 3      | Produtor Agropecuário  |
+| 4      | Frotista/Locadora      |
+| 5      | Diplomático/Consular   |
+| 6      | Amazônia Ocidental     |
+| 7      | SUFRAMA                |
+| 8      | Venda a Órgãos Públicos |
+| 9      | Outros                 |
 
-MIT
+### Regimes Tributários (`regime_tributario`)
+
+| Código | Regime Tributário        |
+|--------|--------------------------|
+| 1      | Simples Nacional         |
+| 2      | SN - Excesso Sublimite   |
+| 3      | Regime Normal            |
+| 4      | MEI                      |
+
+---
+
+## 🤝 Contribuindo
+
+Quer contribuir com melhorias, novas fórmulas ou sugestões de otimização?
+
+Entre em contato com o mantenedor do projeto:
+
+📧 **salvadorbba@gmail.com**
+
+---
+
+## 📄 Licença
+
+Este projeto está licenciado sob a licença MIT. Sinta-se livre para usar, modificar e distribuir conforme necessário.
+
+---
+
+Desenvolvido com ❤️ para facilitar a vida de quem calcula tributos no Brasil.
