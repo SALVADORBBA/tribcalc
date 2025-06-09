@@ -6,17 +6,9 @@ Biblioteca PHP para cálculos tributários brasileiros.
 
 ```bash
 composer require salvadorbba/tribcalc:^1.0.1
+Instalação Adianti   salvadorbba/tribcalc:^1.0.1
 ```
-
-## Instalação Adianti
-```json
-{
-    "require": {
-        "salvadorbba/tribcalc": "^1.0.1"
-    }
-}
-```
-
+        
 ## Uso
 
 A classe `CalculadoraTributaria` pode ser utilizada de duas formas:
