@@ -1,6 +1,7 @@
 {
     "name": "salvadorbba/tribcalc",
     "description": "Biblioteca PHP para cálculos tributários brasileiros",
+    "version": "1.0.1",
     "type": "library",
     "license": "MIT",
     "autoload": {
