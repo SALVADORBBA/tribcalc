@@ -12,7 +12,7 @@ class RateioDocumentoFiscal
         // Verifica se há itens e calcula o total 
         if (empty($itens)) {
             return [];
-        }
+        } 
 
         // Calcula o total dos itens
         foreach ($itens as $item) {
@@ -51,5 +51,11 @@ class RateioDocumentoFiscal
         $itens_calculados[0]->valor_outros += $valor_outros - $total_outros;
 
         return $itens_calculados;
+    }
+
+    public static function calcularRateioJson(array $itens, float $valor_frete = 0, float $valor_seguro = 0, float $valor_desconto = 0, float $valor_outros = 0)
+    {
+        $resultado = self::calcularRateio($itens, $valor_frete, $valor_seguro, $valor_desconto, $valor_outros);
+        return json_encode($resultado, JSON_PRETTY_PRINT);
     }
 }
