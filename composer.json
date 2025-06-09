@@ -1,6 +1,6 @@
 {
     "name": "salvadorbba/tribcalc",
-    "description": "Calculadora de tributos para aplicações PHP",
+    "description": "Biblioteca PHP para cálculos tributários brasileiros",
     "type": "library",
     "license": "MIT",
     "autoload": {
@@ -21,14 +21,17 @@
         "phpunit/phpunit": "^9.0",
         "squizlabs/php_codesniffer": "^3.0"
     },
-    "minimum-stability": "dev",
-    "prefer-stable": true,
+    "minimum-stability": "stable",
     "keywords": [
         "tributos",
         "calculadora",
         "impostos",
         "fiscal",
-        "brasil"
+        "brasil",
+        "icms",
+        "ipi",
+        "difal",
+        "fcp"
     ],
     "support": {
         "issues": "https://github.com/SALVADORBBA/tribcalc/issues",
