@@ -2,7 +2,7 @@
 require_once __DIR__ . '/../src/RateioDocumentoFiscal.php';
 
 use TribCalc\RateioDocumentoFiscal;
-
+ 
 // Criando alguns itens de exemplo
 $itens = [];
 

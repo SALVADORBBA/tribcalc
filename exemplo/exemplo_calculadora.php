@@ -2,7 +2,7 @@
 require_once __DIR__ . '/../src/CalculadoraTributaria.php';
 
 use TribCalc\CalculadoraTributaria;
-
+ 
 // Exemplo 1: Venda dentro do estado (SP -> SP)
 $calculadora1 = new CalculadoraTributaria(
     valorProduto: 1000.00,        // Valor do produto

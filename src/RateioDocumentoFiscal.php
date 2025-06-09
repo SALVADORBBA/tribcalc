@@ -7,7 +7,7 @@ class RateioDocumentoFiscal
     public static function calcularRateio(array $itens, float $valor_frete = 0, float $valor_seguro = 0, float $valor_desconto = 0, float $valor_outros = 0)
     {
         $total_itens = 0;
-        $itens_calculados = [];
+        $itens_calculados = []; 
 
         // Verifica se há itens e calcula o total
         if (empty($itens)) {
