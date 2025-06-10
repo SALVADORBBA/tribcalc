@@ -7,7 +7,7 @@ use TribCalc\CalculadoraTributaria2025;
 // Exemplo de uso da CalculadoraTributaria2025
 $calculadora = new CalculadoraTributaria2025();
 
-// Configurando os valores
+// Configurando os valores 
 $calculadora->setValorProduto(1000.00);
 $calculadora->setUfOrigem('SP');
 $calculadora->setUfDestino('RJ');
