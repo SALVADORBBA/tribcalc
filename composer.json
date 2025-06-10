@@ -8,7 +8,7 @@
         "psr-4": {
             "TribCalc\\": "src/"
         }
-    },
+    }, 
     "authors": [
         {
             "name": "Rubens dos Santos",
