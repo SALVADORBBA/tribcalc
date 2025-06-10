@@ -20,7 +20,7 @@ $calculadora->setAliquotaCBS(0.10); // 10%
 // Configurando regime tributário e CSTs
 $calculadora->setRegimeTributario('NORMAL');
 $calculadora->setCstIBS('00');
-$calculadora->setCstIVA('00');
+$calculadora->setCstIVA('00'); 
 $calculadora->setCstCBS('01');
 
 // Configurando desoneração se necessário
