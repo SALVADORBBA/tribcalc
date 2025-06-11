@@ -3,7 +3,7 @@
     "description": "Biblioteca PHP para cálculos tributários brasileiros",
     "type": "library",
     "license": "MIT",
-    "version": "1.0.5",
+    "version": "1.0.6",
     "autoload": {
         "psr-4": {
             "TribCalc\\": "src/"
@@ -18,5 +18,5 @@
     "require": {
         "php": ">=7.4"
     },
-    "minimum-stability": "stable"
+    "minimum-stability": "stable" 
 }
