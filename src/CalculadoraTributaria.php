@@ -28,11 +28,9 @@ class CalculadoraTributaria
     private string $cstCofins;
     private float $valorIbs;
     private float $baseIbs;
- 
     private float $valorIva;
     private float $baseIva;
- 
-    private float $valorCbs;
+     private float $valorCbs;
     private float $baseCbs;
     private float $aliquotaCbs;
 
