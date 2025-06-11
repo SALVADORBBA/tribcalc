@@ -1,4 +1,4 @@
-<?php
+ private float<?php
 namespace TribCalc;
 
 class CalculadoraTributaria
