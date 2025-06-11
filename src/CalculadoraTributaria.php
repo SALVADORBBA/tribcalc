@@ -3,7 +3,7 @@ namespace TribCalc;
 
 class CalculadoraTributaria
 {
-    private float $valorProduto; 
+    private float $valorProduto;  
     private string $ufOrigem;
     private string $ufDestino;
     private float $aliquotaRedBcIcms;
@@ -15,6 +15,26 @@ class CalculadoraTributaria
     private float $valorDesonerado;
     private int $motivoDesoneracao;
     private int $regime_tributario;
+    private float $valorPis;
+    private float $basePis;
+    private float $valorCofins;
+    private float $baseCofins;
+    private float $valorFcp;
+    private float $valorIcmsUfDest;
+    private float $valorIcmsUfRemet;
+    private string $cstIcms;
+    private string $cstIpi;
+    private string $cstPis;
+    private string $cstCofins;
+    private float $valorIbs;
+    private float $baseIbs;
+ 
+    private float $valorIva;
+    private float $baseIva;
+ 
+    private float $valorCbs;
+    private float $baseCbs;
+    private float $aliquotaCbs;
 
     public function __construct(
         float $valorProduto,
@@ -28,7 +48,25 @@ class CalculadoraTributaria
         float $aliquotaFcp,
         float $valorDesonerado,
         int $motivoDesoneracao,
-        int $regime_tributario
+        int $regime_tributario,
+        float $valorPis = 0.0,
+        float $basePis = 0.0,
+        float $valorCofins = 0.0,
+        float $baseCofins = 0.0,
+        float $valorFcp = 0.0,
+        float $valorIcmsUfDest = 0.0,
+        float $valorIcmsUfRemet = 0.0,
+        string $cstIcms = '',
+        string $cstIpi = '',
+        string $cstPis = '',
+        string $cstCofins = '',
+        float $valorIbs = 0.0,
+        float $baseIbs = 0.0,
+        float $valorIva = 0.0,
+        float $baseIva = 0.0,
+        float $valorCbs = 0.0,
+        float $baseCbs = 0.0,
+        float $aliquotaCbs = 0.0
     ) {
         $this->valorProduto = $valorProduto;
         $this->ufOrigem = strtoupper($ufOrigem);
@@ -42,6 +80,24 @@ class CalculadoraTributaria
         $this->valorDesonerado = $valorDesonerado;
         $this->motivoDesoneracao = $motivoDesoneracao;
         $this->regime_tributario = $regime_tributario;
+        $this->valorPis = $valorPis;
+        $this->basePis = $basePis;
+        $this->valorCofins = $valorCofins;
+        $this->baseCofins = $baseCofins;
+        $this->valorFcp = $valorFcp;
+        $this->valorIcmsUfDest = $valorIcmsUfDest;
+        $this->valorIcmsUfRemet = $valorIcmsUfRemet;
+        $this->cstIcms = $cstIcms;
+        $this->cstIpi = $cstIpi;
+        $this->cstPis = $cstPis;
+        $this->cstCofins = $cstCofins;
+        $this->valorIbs = $valorIbs;
+        $this->baseIbs = $baseIbs;
+        $this->valorIva = $valorIva;
+        $this->baseIva = $baseIva;
+        $this->valorCbs = $valorCbs;
+        $this->baseCbs = $baseCbs;
+        $this->aliquotaCbs = $aliquotaCbs;
     }
 
     public static function fromObject(object $obj): self
@@ -58,7 +114,25 @@ class CalculadoraTributaria
             (float) $obj->aliquotaFcp,
             (float) $obj->valorDesonerado,
             (int) $obj->motivoDesoneracao,
-            (int) $obj->regime_tributario
+            (int) $obj->regime_tributario,
+            (float) ($obj->valorPis ?? 0.0),
+            (float) ($obj->basePis ?? 0.0),
+            (float) ($obj->valorCofins ?? 0.0),
+            (float) ($obj->baseCofins ?? 0.0),
+            (float) ($obj->valorFcp ?? 0.0),
+            (float) ($obj->valorIcmsUfDest ?? 0.0),
+            (float) ($obj->valorIcmsUfRemet ?? 0.0),
+            (string) ($obj->cstIcms ?? ''),
+            (string) ($obj->cstIpi ?? ''),
+            (string) ($obj->cstPis ?? ''),
+            (string) ($obj->cstCofins ?? ''),
+            (float) ($obj->valorIbs ?? 0.0),
+            (float) ($obj->baseIbs ?? 0.0),
+            (float) ($obj->valorIva ?? 0.0),
+            (float) ($obj->baseIva ?? 0.0),
+            (float) ($obj->valorCbs ?? 0.0),
+            (float) ($obj->baseCbs ?? 0.0),
+            (float) ($obj->aliquotaCbs ?? 0.0)
         );
     }
 
